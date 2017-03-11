@@ -1,0 +1,36 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Data.SQLite;
+
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            SQLiteConnection.CreateFile("test.db");
+            var conn = new SQLiteConnection("Data Source=test.db");
+            conn.Open();
+
+            var crecomm = conn.CreateCommand();
+            crecomm.CommandText = "CREATE TABLE TEST(ID NUMBER, NAME STRING)";
+            crecomm.ExecuteNonQuery();
+
+            var inscomm = conn.CreateCommand();
+            inscomm.CommandText = "INSERT INTO TEST VALUES (1, 'TEST')";
+            inscomm.ExecuteNonQuery();
+            
+
+            var selcomm = conn.CreateCommand();
+            selcomm.CommandText = "SELECT * FROM TEST";
+            var reader = selcomm.ExecuteReader();
+
+            while (reader.Read())
+            {
+                Console.WriteLine(reader[1]);
+            }
+        }
+    }
+}
